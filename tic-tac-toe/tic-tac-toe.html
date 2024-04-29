@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<style>
+    *{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background-color: #135941;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: ; */
+    align-items: center;
+}
+.game{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    height: 540px;
+    width: 500px;
+    }
+.grid{
+    height: 90%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: repeat(3,1fr);
+    gap: 10px;
+}
+
+.box{
+  background-color: blanchedalmond;
+  border-radius:10px;
+  font-size: 125px;
+  text-align: center;
+  text-transform: capitalize;
+}
+#new-game{
+    height: 30px;
+    width: 115px;
+    font-size: medium;
+    text-transform: capitalize;
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    background-color: black;
+}
+#greeting{
+    color: white;
+    height: 50px;
+    margin: 15px;
+    font-size: 50px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-transform: capitalize;
+text-align: center;
+}
+
+@media screen and (max-width:850px){
+    #greeting{
+        height: 80px;
+        font-size: 35px;
+    }
+}
+
+@media screen and (max-width:550px){
+.game{
+    height: 440px;
+    width: 400px;
+}
+
+
+.box{
+    font-size: 95px;
+}
+}
+ @media screen and (max-width:430px){
+   
+    .game{
+        height: 340px;
+        width: 300px;
+    }
+    .box{
+        font-size: 75px;
+    }
+}
+/*
+@media screen and (max-width:365px){
+    .game{
+        height: 400px;
+        width: 350px;
+    }
+    .box{
+        font-size: 60px;
+    }
+    #new-game{
+        height: 25px;
+        width: 80px;
+        font-size: small;
+        padding: 5px;
+        margin-bottom: 15px;
+           background-color: black;
+       }
+}  */
+</style>
+</head>
+
+<body>
+    <div id="greeting"></div>
+    <div class="game">
+ 
+        <button id="new-game">
+            new game
+        </button>
+        <div class="grid">
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+        </div>
+    </div>
+
+
+    <script>
+        
+let new_game = document.querySelector("#new-game");
+
+const grid = document.querySelectorAll(".box");
+
+// on clicking new game the page will reload
+new_game.addEventListener('click', () => {
+    location.reload();
+})
+
+const checkWinner = (() => {
+
+    if (grid[0].innerHTML === grid[1].innerHTML && grid[1].innerHTML === grid[2].innerHTML)
+        return grid[0].innerHTML;
+    if (grid[0].innerHTML === grid[3].innerHTML && grid[3].innerHTML === grid[6].innerHTML)
+        return grid[0].innerHTML;
+    if (grid[0].innerHTML === grid[4].innerHTML && grid[4].innerHTML === grid[8].innerHTML)
+        return grid[0].innerHTML;
+    if (grid[3].innerHTML === grid[4].innerHTML && grid[4].innerHTML === grid[5].innerHTML)
+        return grid[3].innerHTML;
+    if (grid[1].innerHTML === grid[4].innerHTML && grid[4].innerHTML === grid[7].innerHTML)
+        return grid[1].innerHTML;
+    if (grid[2].innerHTML === grid[5].innerHTML && grid[5].innerHTML === grid[8].innerHTML)
+        return grid[2].innerHTML;
+    if (grid[6].innerHTML === grid[7].innerHTML && grid[7].innerHTML === grid[8].innerHTML)
+        return grid[6].innerHTML;
+    if (grid[2].innerHTML === grid[4].innerHTML && grid[4].innerHTML === grid[6].innerHTML)
+        return grid[2].innerHTML;
+
+    return "";
+})
+
+let checkDraw = () => {
+    for (const box of grid) {
+        if (box.innerHTML === '')
+            return false;
+    }
+    return true;
+}
+
+
+let turn = true;
+
+let winner = "";
+
+for (const box of grid) {
+
+    box.addEventListener('click', () => {
+        if (winner != "" || winner==="draw")
+            location.reload();
+
+        if (box.innerHTML === "" && winner==="") {
+            box.innerHTML = turn ? 'o' : "x";
+            turn = !turn;
+            
+            if(box.innerHTML==="o")
+            box.style.color="red"
+            else
+            box.style.color="blue"
+
+            const draw = checkDraw();
+            if (draw){
+                document.querySelector("#greeting").innerHTML=`draw!`
+               winner="draw"    
+            }
+
+            winner = checkWinner();
+            if (winner != "") {
+                document.querySelector("#greeting").innerHTML = `"Congratulations!! ${winner} Is The Winner"`
+            }
+
+        }
+    })
+
+}
+
+    </script>
+</body>
+
+</html>
